@@ -29,8 +29,41 @@
     // We're going to be using local storage to allow for state to persist. 
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  // first it will look in local storage for items, if it doesn't find it, it will return an empty array.
+  const items = JSON.parse(localStorage.getItem('items')) || [];
 
+addItems.addEventListener('submit', addItem);
+
+function addItem(e) {
+    //the default behavior of a form is to refresh the page and send the data to a server. We're using client side JS so we don't want that to happen.
+    e.preventDefault();
+    // this is the form tag and we look inside it for a name attribute of item. This is helpful for narrowing down the search. Calling .value will give us the value of the input.
+    const text = this.querySelector('[name=item]').value;
+    const item  = {
+        text,
+        done: false
+    }
+    items.push(item);
+    populateList(items, itemsList);
+    // The Api is .setItem, .getItem, .removeItem, and .clear.
+    localStorage.setItem('items', JSON.stringify(items));
+    //reset the form
+    this.reset();
+}
+// in the following function we use an id to keep track of the index of the item in the array. We also use a data-index to keep track of the index of the item in the array. We use the data-index to delete the item from the array.
+function    populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+        return `
+        <li>
+            <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+            <label for="item${i}">${plate.text}</label>
+        </li>
+        `;
+        // we use .join here because map will return an array but since we're using innerHTML we need a string.
+    }).join('');
+}
+
+// there's an object in the browser called localStorage
 </script>
 
 
