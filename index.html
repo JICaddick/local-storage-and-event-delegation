@@ -63,6 +63,27 @@ function    populateList(plates = [], platesList) {
     }).join('');
 }
 
+toggleDone = (e) => {
+    if(!e.target.matches('input')) return; // skip this unless it's an input
+    const el = e.target;
+    const index = el.dataset.index;
+    // below we access the done property of the item in the array and toggle it.
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList); 
+
+    // Stretch goal: add a delete button to each item.
+    // Stretch goal: add a check all button.
+    // Stretch goal: add an uncheck all button.
+}
+
+addItems.addEventListener('submit', addItem);
+itemsList.addEventListener('click', toggleDone);
+
+
+// const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+// checkboxes.forEach(checkbox => checkbox.addEventListener('click', toggleDone));
+// The whole idea of event delegation is that rather than listening for a click on each checkbox, we listen for a click on the parent element and then use the event object to determine what element was clicked. We'll listen for a click on our unordered list (class="plates") and then use the event object to determine what element was clicked. If the element clicked is an input, we'll run our toggleDone function. The ul element is the parent and is responsible for the children. The children are the inputs. It works for current children and future children. The parent tells the child what to do with the click. 
 // there's an object in the browser called localStorage
 </script>
 
